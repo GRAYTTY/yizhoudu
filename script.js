@@ -31,19 +31,21 @@ const xiaotingQuotes = [
     "杜杜永远是最棒的～"
 ];
 
-function showXiaotingQuote() {
-  const box = document.getElementById("xiaoting-quote-box");
-  const random = Math.floor(Math.random() * xiaotingQuotes.length);
-  box.innerText = xiaotingQuotes[random];
-  box.style.display = "block";
-  setTimeout(() => {
-    box.style.display = "none";
-  }, 3000);
-}
+  // 打开/关闭弹窗
+    function togglePopup() {
+      const popup = document.getElementById('xiaoting-popup');
+      const text = document.getElementById('xiaoting-text');
 
-// 创建弹窗容器
-document.addEventListener("DOMContentLoaded", () => {
-  const quoteBox = document.createElement("div");
-  quoteBox.id = "xiaoting-quote-box";
-  document.body.appendChild(quoteBox);
-});
+      if (popup.style.display === 'block') {
+        popup.style.display = 'none';
+      } else {
+        const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
+        text.textContent = xiaotingQuotes[randomIndex];
+        popup.style.display = 'block';
+      }
+    }
+
+    // 关闭弹窗
+    function closePopup() {
+      document.getElementById('xiaoting-popup').style.display = 'none';
+    }

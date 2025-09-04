@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>乙舟渡 · 日记起航</title>
+    <title>乙舟渡 · 先做了再说🕶</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,15 +27,14 @@
     <script src="script.js"></script>
 
 <!-- Mini 小亭弹窗按钮 -->
-<div id="xiaoting-popup" onclick="showXiaotingQuote()">🧸</div>
+<!-- 图标按钮 -->
+<div id="xiaoting-button" onclick="togglePopup()">🧸</div>
 
-</body>
-<!-- Mini 小亭对话框 -->
-<div id="xiaoting-box" class="xiaoting-box hidden">
-  <div class="xiaoting-content">
-    <p id="xiaoting-text">你好，我是迷你小亭！</p>
-    <button onclick="closeXiaoting()">知道啦</button>
-  </div>
+<!-- 弹窗 -->
+<div id="xiaoting-popup">
+  <p>你好，我是迷你小亭！</p>
+  <button onclick="closePopup()">知道啦</button>
 </div>
+
 
 </html>

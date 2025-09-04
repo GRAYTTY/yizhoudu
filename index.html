@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乙舟渡 · 日记起航</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📓 乙舟渡 · 日记起航</h1>
+        <label for="date">选择日期：</label>
+        <input type="date" id="date">
+        <label for="mood">选择心情：</label>
+        <select id="mood">
+            <option value="😊">😊 开心</option>
+            <option value="😐">😐 一般</option>
+            <option value="😢">😢 伤心</option>
+            <option value="😡">😡 生气</option>
+            <option value="🌧">🌧 阴郁</option>
+        </select>
+        <label for="diary">写下今天的日记：</label>
+        <textarea id="diary" rows="10"></textarea>
+        <button onclick="saveEntry()">保存</button>
+        <p id="status"></p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

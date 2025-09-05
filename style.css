@@ -1,35 +1,65 @@
-/* 全局样式 */
+/* 基础样式 - 保留原有核心样式 */
 body {
     font-family: "Microsoft YaHei", sans-serif;
-    background: #f7f6f2;
+    background: #f7f6f2; /* 恢复背景色 */
     margin: 0;
     padding: 20px;
-    min-height: 100vh;
-    box-sizing: border-box;
+    color: #333; /* 确保文本可见 */
 }
 
-/* 日记容器样式 */
 .container {
     max-width: 600px;
-    margin: auto;
+    margin: 20px auto; /* 增加顶部 margin 让页面不贴顶 */
     background: #ffffff;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+/* 标题样式 - 新增以美化标题 */
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 10px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
 /* 表单元素样式 */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-row > div {
+    flex: 1;
+}
+
 textarea, input, select {
     width: 100%;
-    margin: 10px 0;
     padding: 10px;
     font-size: 16px;
     border-radius: 8px;
     border: 1px solid #ccc;
-    box-sizing: border-box;
+    box-sizing: border-box; /* 确保 padding 不会增加元素总宽度 */
 }
 
-/* 按钮基础样式 */
+textarea {
+    min-height: 150px; /* 给文本区域一个合适的最小高度 */
+    resize: vertical; /* 允许垂直调整大小 */
+}
+
+/* 按钮样式 */
 button {
     padding: 10px 20px;
     font-size: 16px;
@@ -38,58 +68,66 @@ button {
     color: white;
     border: none;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background-color 0.3s; /* 平滑过渡效果 */
 }
 
 button:hover {
     background-color: #659ec7;
 }
 
-/* 迷你小亭按钮样式 */
+/* 小亭按钮 */
 #xiaoting-button {
     position: fixed;
     bottom: 30px;
     right: 30px;
     background-color: pink;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+    padding: 10px;
+    font-size: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    z-index: 100;
+    z-index: 1000; /* 确保在其他元素上方 */
 }
 
-#xiaoting-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-}
-
-/* 弹窗样式 */
+/* 小亭弹窗 */
 #xiaoting-popup {
     position: fixed;
-    bottom: 110px;
+    bottom: 100px;
     right: 30px;
-    background-color: white;
-    border-radius: 15px;
+    background-color: #fefefe;
+    border: 1px solid #ddd;
     padding: 20px;
-    width: 250px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.15);
-    z-index: 101;
+    border-radius: 12px;
+    width: 260px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    font-size: 16px;
+    z-index: 9999;
+    display: none; /* 默认隐藏弹窗 */
 }
 
-#xiaoting-text {
-    margin: 0 0 15px 0;
-    line-height: 1.5;
-    color: #333;
+#xiaoting-popup button {
+    background-color: #87b3d6;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    cursor: pointer;
 }
 
-#xiaoting-close {
-    width: 100%;
-    background-color: #8ab6d6;
+/* 小熊图标样式 */
+.bear-icon {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    font-size: 30px;
 }
-    
+
+/* 日记条目样式 - 为未来可能的展示功能预留 */
+.diary-entry {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 3px solid #8ab6d6;
+    background-color: #f9f9f9;
+    border-radius: 0 8px 8px 0;
+}

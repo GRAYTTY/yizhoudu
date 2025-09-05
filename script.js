@@ -32,21 +32,33 @@ const xiaotingQuotes = [
 ];
 
 
-  // 打开/关闭弹窗
-    function togglePopup() {
-      const popup = document.getElementById('xiaoting-popup');
-      const text = document.getElementById('xiaoting-text');
+// ✅ 记录是否首次点击（true 表示还没打开过）
+let firstClick = true;
 
-      if (popup.style.display === 'block') {
-        popup.style.display = 'none';
-      } else {
-        const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
-        text.textContent = xiaotingQuotes[randomIndex];
-        popup.style.display = 'block';
-      }
-    }
+// ✅ 控制弹窗逻辑
+function togglePopup() {
+  const popup = document.getElementById('xiaoting-popup');
+  const text = document.getElementById('xiaoting-text');
 
-    // 关闭弹窗
-    function closePopup() {
-      document.getElementById('xiaoting-popup').style.display = 'none';
+  // 第一次点击 → 显示默认话术
+  if (popup.style.display === 'none' || popup.style.display === '') {
+    popup.style.display = 'block';
+    if (firstClick) {
+      text.textContent = "你好，我是迷你小亭！";
+      firstClick = false;
+    } else {
+      // 后续点击 → 随机语录
+      const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
+      text.textContent = xiaotingQuotes[randomIndex];
     }
+  } else {
+    // 如果弹窗已显示，再点小熊 → 刷新语录
+    const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
+    text.textContent = xiaotingQuotes[randomIndex];
+  }
+}
+
+// ✅ 关闭弹窗
+function closePopup() {
+  document.getElementById('xiaoting-popup').style.display = 'none';
+}

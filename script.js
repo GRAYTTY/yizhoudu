@@ -30,43 +30,45 @@ const xiaotingQuotes = [
   "小海鸥今天也在努力吗？我也要加油！ヾ(◍°∇°◍)ﾉﾞ",
   "杜杜永远是最棒的～"
 ];
+let isPopupFirstOpen = true;
 
-
-// ✅ 记录是否首次点击（true 表示还没打开过）
-let firstClick = true;
-
-// ✅ 控制弹窗逻辑
+// 弹窗核心逻辑（不变）
 function togglePopup() {
-  console.log('小熊按钮被点击了');
   const popup = document.getElementById('xiaoting-popup');
   const text = document.getElementById('xiaoting-text');
-
-  // 第一次点击 → 显示默认话术
   if (popup.style.display === 'none' || popup.style.display === '') {
     popup.style.display = 'block';
-    if (firstClick) {
-      text.textContent = "你好，我是迷你小亭！";
-      firstClick = false;
+    if (isPopupFirstOpen) {
+      text.textContent = "你好，我是迷你小亭哦！"; // 同步 HTML 中的默认文本
+      isPopupFirstOpen = false;
     } else {
-      // 后续点击 → 随机语录
-      const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
-      text.textContent = xiaotingQuotes[randomIndex];
+      text.textContent = getRandomQuote();
     }
   } else {
-    // 如果弹窗已显示，再点小熊 → 刷新语录
-    const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
-    text.textContent = xiaotingQuotes[randomIndex];
+    text.textContent = getRandomQuote();
   }
 }
 
-// ✅ 关闭弹窗
+// 关闭弹窗逻辑（不变）
 function closePopup() {
-  document.getElementById('xiaoting-popup').style.display = 'none';
-  firstClick = true; // 关闭后，重置首次点击
+  const popup = document.getElementById('xiaoting-popup');
+  popup.style.display = 'none';
+  isPopupFirstOpen = true;
 }
 
-// 绑定事件
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('xiaoting-button').addEventListener('click', togglePopup);
-  document.getElementById('xiaoting-close').addEventListener('click', closePopup);
-});
+// 抽取随机语录函数（不变）
+function getRandomQuote() {
+  const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
+  return xiaotingQuotes[randomIndex];
+}
+
+// ---------------------- 关键补充：绑定点击事件 ----------------------
+// 获取小熊按钮和关闭按钮
+const xiaotingButton = document.getElementById('xiaoting-button');
+const xiaotingCloseBtn = document.getElementById('xiaoting-close');
+
+// 给小熊按钮绑定「打开/刷新弹窗」事件
+xiaotingButton.addEventListener('click', togglePopup);
+
+// 给「知道啦」按钮绑定「关闭弹窗」事件
+xiaotingCloseBtn.addEventListener('click', closePopup);

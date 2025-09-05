@@ -46,7 +46,7 @@ button:hover {
   cursor: pointer;
 }
 
-/* 小亭弹窗 */
+/* 小亭弹窗：保持原有样式，优化文本间距 */
 #xiaoting-popup {
   position: fixed;
   bottom: 100px;
@@ -56,17 +56,21 @@ button:hover {
   padding: 20px;
   border-radius: 12px;
   width: 260px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
   font-size: 16px;
+  line-height: 1.5; /* 文本行高，更易读 */
   z-index: 9999;
 }
-
 #xiaoting-popup button {
   background-color: #87b3d6;
   color: white;
   border: none;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 6px;
-  margin-top: 10px;
+  margin-top: 15px;
   cursor: pointer;
+  transition: background 0.3s;
+}
+#xiaoting-popup button:hover {
+  background-color: #659ec7;
 }

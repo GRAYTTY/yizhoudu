@@ -61,4 +61,9 @@ function togglePopup() {
 // ✅ 关闭弹窗
 function closePopup() {
   document.getElementById('xiaoting-popup').style.display = 'none';
+  firstClick = true; // 关闭后，重置首次点击
 }
+
+// 绑定事件
+document.getElementById('xiaoting-button').addEventListener('click', togglePopup);
+document.getElementById('xiaoting-close').addEventListener('click', closePopup);

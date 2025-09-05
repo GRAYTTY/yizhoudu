@@ -1,208 +1,382 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>乙舟渡 · 先做了再说🕶</title>
-    <style>
-        body {
-            font-family: "Microsoft YaHei", sans-serif;
-            background: #f7f6f2;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        textarea, input, select {
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            background-color: #8ab6d6;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #659ec7;
-        }
-        
-        /* 迷你小亭样式 */
-        #xiaoting-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: pink;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            z-index: 100;
-        }
-        
-        #xiaoting-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-        }
-        
-        #xiaoting-popup {
-            position: fixed;
-            bottom: 110px;
-            right: 30px;
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            width: 250px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
-            display: none;
-            z-index: 101;
-        }
-        
-        #xiaoting-text {
-            margin: 0 0 15px 0;
-            line-height: 1.5;
-            color: #333;
-        }
-        
-        #xiaoting-close {
-            width: 100%;
-            background-color: #8ab6d6;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>乙舟渡 · 去干点什么🕶</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #f7f6f2;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 600px;
+      margin: 44px auto 0 auto;
+      background: #fff;
+      padding: 36px 24px 30px 24px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.1rem;
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+    }
+    #datetime-box {
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2.5px;
+      color: #505050;
+      margin-bottom: 12px;
+      line-height: 1.18;
+      text-shadow: 0 2px 10px rgba(100,150,200,0.08);
+      font-family: "Consolas", "Menlo", "Microsoft YaHei", monospace;
+      transition: color 0.6s;
+    }
+    #stopwatch-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    #stopwatch-time {
+      font-size: 2.0rem;
+      font-family: "Consolas", monospace;
+      color: #1a7894;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      margin-top: 3px;
+    }
+    #stopwatch-buttons button {
+      margin: 0 7px;
+      padding: 8px 22px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      background: #f3f7fc;
+      color: #4781b6;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.17s, color 0.17s;
+      box-shadow: 0 1px 6px rgba(100,150,220,0.05);
+    }
+    #stopwatch-buttons button:active {
+      background: #e4eefe;
+      color: #365881;
+    }
+    #xiaoting-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: pink;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.16);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      z-index: 100;
+    }
+    #xiaoting-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.24);
+    }
+    #xiaoting-popup {
+      position: fixed;
+      bottom: 110px;
+      right: 30px;
+      background: #fff;
+      border-radius: 15px;
+      padding: 18px 15px 16px 15px;
+      width: 300px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.13);
+      z-index: 101;
+      display: none;
+      animation: popIn 0.19s;
+    }
+    @keyframes popIn {
+      from { transform: translateY(20px) scale(0.98); opacity: 0; }
+      to { transform: none; opacity: 1; }
+    }
+    #xiaoting-random {
+      background: #ffecfa;
+      color: #c05eae;
+      border-radius: 7px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      min-height: 20px;
+      text-align: center;
+      border: 1px solid #ffe1fa;
+      box-shadow: 0 1px 6px rgba(200,120,180,0.04);
+    }
+    #chat-area {
+      height: 95px;
+      overflow-y: auto;
+      text-align: left;
+      font-size: 15px;
+      background: #f6f7fb;
+      padding: 8px 10px 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #e3e9ef;
+    }
+    #chat-area b {
+      color: #8ab6d6;
+    }
+    #chat-input-area {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 7px;
+    }
+    #chat-input {
+      flex: 1;
+      padding: 8px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    #chat-send {
+      background: #8ab6d6;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 13px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    #chat-send:hover {
+      background: #659ec7;
+    }
+    #xiaoting-close {
+      width: 100%;
+      background-color: #8ab6d6;
+      color: #fff;
+      border: none;
+      padding: 8px 0;
+      font-size: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 5px;
+      transition: background 0.22s;
+    }
+    #xiaoting-close:hover {
+      background-color: #659ec7;
+    }
+
+  .wake-en {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-family: "Consolas", "Menlo", "Microsoft YaHei", monospace;
+    letter-spacing: 1.5px;
+    color: #576983;
+    user-select: none;
+  }
+  .wake-en .en-1 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+  .wake-en .en-2 {
+    font-size: 1.04rem;
+    color: #899ab6;
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  </style>
+
 </head>
 <body>
-    <div class="container">
-        <h1>📓 乙舟渡 · 先做了再说🕶</h1>
-        <label for="date">选择日期：</label>
-        <input type="date" id="date">
-        <label for="mood">选择心情：</label>
-        <select id="mood">
-            <option value="😊">😊 开心</option>
-            <option value="😐">😐 一般</option>
-            <option value="😢">😢 伤心</option>
-            <option value="😡">😡 生气</option>
-            <option value="🌧">🌧 阴郁</option>
-        </select>
-        <label for="diary">写下今天的日记：</label>
-        <textarea id="diary" rows="10"></textarea>
-        <button onclick="saveEntry()">保存</button>
-        <p id="status"></p>
+  <div class="container">
+    <h1>📓 乙舟渡 · 去干点什么🕶</h1>
+    <div id="datetime-box">载入中…</div>
+    <div id="stopwatch-area">
+      <div id="stopwatch-time">00:00:00</div>
+      <div id="stopwatch-buttons">
+        <button id="sw-start">开始</button>
+        <button id="sw-pause">暂停</button>
+        <button id="sw-reset">刷新</button>
+      </div>
     </div>
-
-    <!-- 弹窗框（最开始 hidden） -->
-    <div id="xiaoting-button">🧸</div>
-    <div id="xiaoting-popup" style="display: none;">
-        <p id="xiaoting-text">你好，我是迷你小亭哦！</p>
-        <button id="xiaoting-close">知道啦</button>
+    <div class="wake-en">
+      <div class="en-1">WOKE UP</div>
+      <div class="en-2">Ready to start some shit 😅</div>
     </div>
+  </div>
+  <div id="xiaoting-button" title="点我召唤迷你小亭">🧸</div>
+  <div id="xiaoting-popup">
+    <div id="xiaoting-random">你好，我是迷你小亭哦！</div>
+    <div id="chat-area"></div>
+    <div id="chat-input-area">
+      <input id="chat-input" type="text" maxlength="200" autocomplete="off" placeholder="和小亭说点什么...">
+      <button id="chat-send">发送</button>
+    </div>
+    <button id="xiaoting-close">知道啦</button>
+  </div>
+  <script>
+    // ========== 日期与时间 ==========
+    function updateDateTime() {
+      const box = document.getElementById("datetime-box");
+      const now = new Date();
+      const weekArr = ['日', '一', '二', '三', '四', '五', '六'];
+      const dateStr = now.getFullYear() + '-' +
+        String(now.getMonth()+1).padStart(2,'0') + '-' +
+        String(now.getDate()).padStart(2,'0');
+      const timeStr = String(now.getHours()).padStart(2,'0') + ':' +
+        String(now.getMinutes()).padStart(2,'0') + ':' +
+        String(now.getSeconds()).padStart(2,'0');
+      const weekStr = '星期' + weekArr[now.getDay()];
+      box.textContent = `${dateStr}  ${weekStr}  ${timeStr}`;
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
 
-    <script>
-        // 等待DOM加载完成后再执行
-        document.addEventListener('DOMContentLoaded', function() {
-            // 日记保存功能
-            function saveEntry() {
-                const date = document.getElementById("date").value;
-                const mood = document.getElementById("mood").value;
-                const diary = document.getElementById("diary").value;
-                if (!date || !diary) {
-                    document.getElementById("status").textContent = "请填写日期和日记内容";
-                    return;
-                }
-                const entry = { mood, diary };
-                localStorage.setItem("entry-" + date, JSON.stringify(entry));
-                document.getElementById("status").textContent = "✅ 已保存！";
-            }
-            
-            // 迷你小亭语录弹窗逻辑
-            const xiaotingQuotes = [
-                "今天也是元气满满的小亭！",
-                "记得按时吃饭饭！",
-                "给你一口小熊饼干！",
-                "唔……偷偷亲一下你",
-                "小亭今天也要加油写日记哦！",
-                "在和小海鸥聊天ing...诶呀被发现了！",
-                "摸一会儿鱼嘿嘿（晃脚脚）",
-                "好想喝奶茶呀！你也要喝吗？",
-                "你今天的心情是什么颜色？",
-                "记得多喝水哦！（叉腰）",
-                "给田田和邱邱一点爱！",
-                "小海鸥今天也在努力吗？我也要加油！ヾ(◍°∇°◍)ﾉﾞ",
-                "杜杜永远是最棒的～"
-            ];
-            
-            let isPopupFirstOpen = true;
-            
-            // 弹窗核心逻辑
-            function togglePopup() {
-                const popup = document.getElementById('xiaoting-popup');
-                const text = document.getElementById('xiaoting-text');
-                
-                if (popup.style.display === 'none' || popup.style.display === '') {
-                    popup.style.display = 'block';
-                    if (isPopupFirstOpen) {
-                        text.textContent = "你好，我是迷你小亭哦！";
-                        isPopupFirstOpen = false;
-                    } else {
-                        text.textContent = getRandomQuote();
-                    }
-                } else {
-                    text.textContent = getRandomQuote();
-                }
-            }
-            
-            // 关闭弹窗逻辑
-            function closePopup() {
-                const popup = document.getElementById('xiaoting-popup');
-                popup.style.display = 'none';
-                isPopupFirstOpen = true;
-            }
-            
-            // 随机语录函数
-            function getRandomQuote() {
-                const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
-                return xiaotingQuotes[randomIndex];
-            }
-            
-            // 获取元素并绑定事件
-            const xiaotingButton = document.getElementById('xiaoting-button');
-            const xiaotingCloseBtn = document.getElementById('xiaoting-close');
-            
-            // 确保元素存在再绑定事件
-            if (xiaotingButton) {
-                xiaotingButton.addEventListener('click', togglePopup);
-            }
-            
-            if (xiaotingCloseBtn) {
-                xiaotingCloseBtn.addEventListener('click', closePopup);
-            }
-            
-            // 暴露saveEntry函数到全局，供HTML调用
-            window.saveEntry = saveEntry;
-        });
-    </script>
+    // ========== 手动计时器 ==========
+    let swTimer = null, swElapsed = 0, swRunning = false;
+    const swTime = document.getElementById('stopwatch-time');
+    function renderStopwatch() {
+      const h = String(Math.floor(swElapsed/3600)).padStart(2,'0');
+      const m = String(Math.floor(swElapsed/60)%60).padStart(2,'0');
+      const s = String(swElapsed%60).padStart(2,'0');
+      swTime.textContent = `${h}:${m}:${s}`;
+    }
+    function swStart() {
+      if(swRunning) return;
+      swRunning = true;
+      swTimer = setInterval(() => {
+        swElapsed++; renderStopwatch();
+      }, 1000);
+    }
+    function swPause() {
+      swRunning = false;
+      clearInterval(swTimer);
+    }
+    function swReset() {
+      swPause();
+      swElapsed = 0;
+      renderStopwatch();
+    }
+    document.getElementById('sw-start').onclick = swStart;
+    document.getElementById('sw-pause').onclick = swPause;
+    document.getElementById('sw-reset').onclick = swReset;
+    renderStopwatch();
+
+    // ========== 随机语录功能 ==========
+    const xiaotingQuotes = [
+      "今天也是元气满满的小亭！",
+      "记得按时吃饭饭！",
+      "给你一口小熊饼干！",
+      "唔……偷偷亲一下你（///）",
+      "小亭今天也在加油写日记哦！（展示）",
+      "在和小海鸥聊天ing...诶呀被发现了！",
+      "摸一会儿鱼嘿嘿（晃脚脚）",
+      "好想喝奶茶呀！你也要喝吗？",
+      "你今天吃水果了吗？我喜欢吃葡萄哦！",
+      "记得多喝水哦！（叉腰）",
+      "布丁时间到~😋",
+      "小海鸥今天也在努力吗？我也要加油！ヾ(◍°∇°◍)ﾉﾞ",
+      "（玩熊熊ing）...诶？你也要玩吗？（举起熊熊）只能摸一下下🧸",
+      "（小亭在睡觉）zzZ...",
+      "小亭永远是最棒的～你也是，嘿嘿~"
+    ];
+    function getRandomQuote() {
+      const i = Math.floor(Math.random()*xiaotingQuotes.length);
+      return xiaotingQuotes[i];
+    }
+    function showRandomQuote() {
+      document.getElementById('xiaoting-random').textContent = getRandomQuote();
+    }
+    function togglePopup() {
+      const popup = document.getElementById('xiaoting-popup');
+      if (popup.style.display === 'none' || popup.style.display === '') {
+        popup.style.display = 'block';
+        showRandomQuote();
+      } else {
+        showRandomQuote();
+      }
+    }
+    function closePopup() {
+      document.getElementById('xiaoting-popup').style.display = 'none';
+    }
+    document.getElementById('xiaoting-button').onclick = togglePopup;
+    document.getElementById('xiaoting-close').onclick = closePopup;
+
+    // ========== 聊天功能 ==========
+// ========== 聊天功能 ==========
+// 初始化聊天区域（建议放在DOM加载完成后执行）
+function initChat() {
+  document.getElementById('chat-area').innerHTML = "";
+}
+
+// 添加消息到聊天区域（使用DOM操作更安全）
+function appendMessage(sender, text) {
+  const chatArea = document.getElementById('chat-area');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = sender === '你' ? 'user-message' : 'assistant-message';
+  messageDiv.innerHTML = `<b>${sender}：</b>${text}`;
+  chatArea.appendChild(messageDiv);
+  chatArea.scrollTop = chatArea.scrollHeight; // 滚动到底部
+  return messageDiv; // 返回创建的元素，方便后续更新
+}
+
+// 发送消息功能
+function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const val = input.value.trim();
+  if (!val) return;
+
+  appendMessage('你', val);
+  input.value = '';
+  input.focus();
+
+  const thinkingMessage = appendMessage('迷你小亭', '思考中…');
+
+  fetch('https://api.deepseek.com/v1/chat/completions', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer sk-ofbkdgrwxmjyrfgxgwoplguvgeqkblyxyalowbvwhlfkpovg"  // 真实key别直接暴露在生产前端
+    },
+    body: JSON.stringify({
+      model: "deepseek-reasoner", // 或 "deepseek-chat"，视官方为准
+      messages: [
+        { role: "system", content: "你是可爱的迷你小亭，善于用轻松活泼的语气和用户聊天。" },
+        { role: "user", content: val }
+      ],
+      temperature: 0.7
+    })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error(`API 错误: ${res.status}`);
+    return res.json();
+  })
+  .then(data => {
+    const reply = data.choices?.[0]?.message?.content || "（小亭没有回复到内容）";
+    thinkingMessage.innerHTML = `<b>迷你小亭：</b>${reply}`;
+  })
+  .catch(error => {
+    console.error('请求失败：', error);
+    thinkingMessage.innerHTML = `<b>迷你小亭：</b>（小亭网络开小差了）`;
+  });
+}
+
+// 初始化聊天区域（确保DOM已加载）
+document.addEventListener('DOMContentLoaded', initChat);
+
+  </script>
 </body>
 </html>
-    

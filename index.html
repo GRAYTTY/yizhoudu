@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>乙舟渡 · 先做了再说🕶</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- 引入外部CSS文件 -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -25,17 +26,15 @@
         <p id="status"></p>
     </div>
 
-<!-- Mini 小亭弹窗按钮 -->
-<!-- 图标按钮 -->
-<div id="xiaoting-button" onclick="togglePopup()">🧸</div>
+    <!-- 弹窗框 -->
+    <div id="xiaoting-button">🧸</div>
+    <div id="xiaoting-popup" style="display: none;">
+        <p id="xiaoting-text">你好，我是迷你小亭哦！</p>
+        <button id="xiaoting-close">知道啦</button>
+    </div>
 
-<!-- 弹窗框（最开始 hidden） -->
-<div id="xiaoting-button">🧸</div>
-<div id="xiaoting-popup" style="display: none;">
-  <p id="xiaoting-text">你好，我是迷你小亭哦！</p>
-  <button id="xiaoting-close">知道啦</button>
-</div>
-
-<script src="script.js"></script>
+    <!-- 引入外部JavaScript文件 -->
+    <script src="script.js"></script>
 </body>
 </html>
+    

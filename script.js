@@ -37,6 +37,7 @@ let firstClick = true;
 
 // ✅ 控制弹窗逻辑
 function togglePopup() {
+  console.log('小熊按钮被点击了');
   const popup = document.getElementById('xiaoting-popup');
   const text = document.getElementById('xiaoting-text');
 
@@ -65,5 +66,7 @@ function closePopup() {
 }
 
 // 绑定事件
-document.getElementById('xiaoting-button').addEventListener('click', togglePopup);
-document.getElementById('xiaoting-close').addEventListener('click', closePopup);
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('xiaoting-button').addEventListener('click', togglePopup);
+  document.getElementById('xiaoting-close').addEventListener('click', closePopup);
+});

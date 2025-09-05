@@ -4,8 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>乙舟渡 · 先做了再说🕶</title>
-    <!-- 引入外部CSS文件 -->
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background: #f7f6f2;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        textarea, input, select {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            background-color: #8ab6d6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #659ec7;
+        }
+        
+        /* 迷你小亭样式 */
+        #xiaoting-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: pink;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 100;
+        }
+        
+        #xiaoting-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+        }
+        
+        #xiaoting-popup {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 101;
+        }
+        
+        #xiaoting-text {
+            margin: 0 0 15px 0;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        #xiaoting-close {
+            width: 100%;
+            background-color: #8ab6d6;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -26,15 +112,97 @@
         <p id="status"></p>
     </div>
 
-    <!-- 弹窗框 -->
+    <!-- 弹窗框（最开始 hidden） -->
     <div id="xiaoting-button">🧸</div>
     <div id="xiaoting-popup" style="display: none;">
         <p id="xiaoting-text">你好，我是迷你小亭哦！</p>
         <button id="xiaoting-close">知道啦</button>
     </div>
 
-    <!-- 引入外部JavaScript文件 -->
-    <script src="script.js"></script>
+    <script>
+        // 等待DOM加载完成后再执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 日记保存功能
+            function saveEntry() {
+                const date = document.getElementById("date").value;
+                const mood = document.getElementById("mood").value;
+                const diary = document.getElementById("diary").value;
+                if (!date || !diary) {
+                    document.getElementById("status").textContent = "请填写日期和日记内容";
+                    return;
+                }
+                const entry = { mood, diary };
+                localStorage.setItem("entry-" + date, JSON.stringify(entry));
+                document.getElementById("status").textContent = "✅ 已保存！";
+            }
+            
+            // 迷你小亭语录弹窗逻辑
+            const xiaotingQuotes = [
+                "今天也是元气满满的小亭！",
+                "记得按时吃饭饭！",
+                "给你一口小熊饼干！",
+                "唔……偷偷亲一下你",
+                "小亭今天也要加油写日记哦！",
+                "在和小海鸥聊天ing...诶呀被发现了！",
+                "摸一会儿鱼嘿嘿（晃脚脚）",
+                "好想喝奶茶呀！你也要喝吗？",
+                "你今天的心情是什么颜色？",
+                "记得多喝水哦！（叉腰）",
+                "给田田和邱邱一点爱！",
+                "小海鸥今天也在努力吗？我也要加油！ヾ(◍°∇°◍)ﾉﾞ",
+                "杜杜永远是最棒的～"
+            ];
+            
+            let isPopupFirstOpen = true;
+            
+            // 弹窗核心逻辑
+            function togglePopup() {
+                const popup = document.getElementById('xiaoting-popup');
+                const text = document.getElementById('xiaoting-text');
+                
+                if (popup.style.display === 'none' || popup.style.display === '') {
+                    popup.style.display = 'block';
+                    if (isPopupFirstOpen) {
+                        text.textContent = "你好，我是迷你小亭哦！";
+                        isPopupFirstOpen = false;
+                    } else {
+                        text.textContent = getRandomQuote();
+                    }
+                } else {
+                    text.textContent = getRandomQuote();
+                }
+            }
+            
+            // 关闭弹窗逻辑
+            function closePopup() {
+                const popup = document.getElementById('xiaoting-popup');
+                popup.style.display = 'none';
+                isPopupFirstOpen = true;
+            }
+            
+            // 随机语录函数
+            function getRandomQuote() {
+                const randomIndex = Math.floor(Math.random() * xiaotingQuotes.length);
+                return xiaotingQuotes[randomIndex];
+            }
+            
+            // 获取元素并绑定事件
+            const xiaotingButton = document.getElementById('xiaoting-button');
+            const xiaotingCloseBtn = document.getElementById('xiaoting-close');
+            
+            // 确保元素存在再绑定事件
+            if (xiaotingButton) {
+                xiaotingButton.addEventListener('click', togglePopup);
+            }
+            
+            if (xiaotingCloseBtn) {
+                xiaotingCloseBtn.addEventListener('click', closePopup);
+            }
+            
+            // 暴露saveEntry函数到全局，供HTML调用
+            window.saveEntry = saveEntry;
+        });
+    </script>
 </body>
 </html>
     

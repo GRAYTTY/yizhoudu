@@ -33,20 +33,7 @@ button:hover {
     background-color: #659ec7;
 }
 
-<!--迷你小亭对话框>
-#xiaoting-popup {
-  display: none;
-  position: fixed;
-  bottom: 100px;
-  right: 100px;
-  background-color: #fff;
-  border: 2px solid pink;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 1000;
-}
-
+/* 小亭按钮 */
 #xiaoting-button {
   position: fixed;
   bottom: 20px;
@@ -63,4 +50,18 @@ button:hover {
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   z-index: 1001;
+}
+
+/* 小亭弹窗 */
+#xiaoting-popup {
+  display: none;
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
+  background-color: #fffaf0;
+  border: 2px solid pink;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
 }

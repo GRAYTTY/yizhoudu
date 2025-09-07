@@ -2,12 +2,16 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>乙舟渡 · 去干点什么🕶</title>
+  <title>乙舟渡</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 新增：FlipClock 依赖（CSS + jQuery + FlipClock 核心JS） -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/flipclock/0.7.8/flipclock.min.css">
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/flipclock/0.7.8/flipclock.min.js"></script>
   <style>
     body {
       font-family: "Microsoft YaHei", sans-serif;
-      background: #f7f6f2;
+      background: #1a1a1a;
       margin: 0;
       padding: 0;
       min-height: 100vh;
@@ -27,27 +31,50 @@
       margin-bottom: 18px;
       letter-spacing: 1px;
     }
-    #datetime-box {
-      font-size: 2.5rem;
-      font-weight: bold;
-      letter-spacing: 2.5px;
-      color: #505050;
-      margin-bottom: 12px;
-      line-height: 1.18;
-      text-shadow: 0 2px 10px rgba(100,150,200,0.08);
-      font-family: "Consolas", "Menlo", "Microsoft YaHei", monospace;
-      transition: color 0.6s;
-    }
+#datetime-box {
+  /* 保留原样式，新增以下内容控制换行 */
+  display: flex;
+  flex-direction: column; /* 垂直排列子元素（强制换行） */
+  align-items: center; /* 子元素水平居中（与原设计一致） */
+  gap: 4px; /* 两行之间的间距，可根据需求调整（如6px） */
+}
+
+  /* 为日期行和时间行设置原有的字体样式，保持视觉统一 */
+ /* 日期（如 2025-09-07 Sun） */
+ #datetime-box .date-week {
+   font-size: 2.2rem;
+   font-weight: 600;
+   color: #899ab6;
+   letter-spacing: 1.5px;
+   font-family: "Consolas", "Microsoft YaHei", monospace;
+ }
+
+ /* 时间（如 15:51:35） */
+ #datetime-box .time {
+   font-size: 1.4rem;
+   font-weight: bold;
+   color: #899ab6;
+   letter-spacing: 3px;
+   font-family: "Consolas", monospace;
+ }
     #stopwatch-area {
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-bottom: 18px;
     }
+    /* 新增：FlipClock 时钟本身的底部间距（避免时钟和按钮贴太近） */
+   /* ✅ 让计时器翻页居中 */
+   .stopwatch-clock {
+     display: flex;
+     justify-content: center;
+     margin-bottom: 15px;
+     width: 100%; /* 确保撑满父容器 */
+   }
     #stopwatch-time {
       font-size: 2.0rem;
       font-family: "Consolas", monospace;
-      color: #1a7894;
+      color: #a5bcd9;
       letter-spacing: 2px;
       margin-bottom: 8px;
       margin-top: 3px;
@@ -59,15 +86,15 @@
       border-radius: 8px;
       border: none;
       background: #f3f7fc;
-      color: #4781b6;
+      color: #4a4a4a;
       font-weight: bold;
       cursor: pointer;
       transition: background 0.17s, color 0.17s;
       box-shadow: 0 1px 6px rgba(100,150,220,0.05);
     }
     #stopwatch-buttons button:active {
-      background: #e4eefe;
-      color: #365881;
+      background: #1a1a1a;
+      color: #ffffff;
     }
     #xiaoting-button {
       position: fixed;
@@ -182,36 +209,77 @@
     text-align: center;
     font-family: "Consolas", "Menlo", "Microsoft YaHei", monospace;
     letter-spacing: 1.5px;
-    color: #576983;
+    color: #899ab6;
     user-select: none;
   }
   .wake-en .en-1 {
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     font-weight: bold;
     letter-spacing: 2px;
   }
   .wake-en .en-2 {
-    font-size: 1.04rem;
-    color: #899ab6;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1a1a1a;
     margin-top: 2px;
     font-style: italic;
   }
+/* 影藏计时器上文字 */
+  .flip-clock-label {
+    display: none !important;
+  }
+
+.status-box {
+  margin: 30px auto 60px auto;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+#current-task {
+  width: 100%;
+  height: 23px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-family: "Microsoft YaHei", sans-serif;
+  border-radius: 10px;
+  border: 1px solid #d0d7e2;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  resize: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+#current-task:focus {
+  border: 1px solid #8ab6d6;
+  box-shadow: 0 0 5px rgba(100,150,220,0.2);
+  outline: none;
+}
+
 
   </style>
 
 </head>
 <body>
   <div class="container">
-    <h1>📓 乙舟渡 · 去干点什么🕶</h1>
-    <div id="datetime-box">载入中…</div>
-    <div id="stopwatch-area">
-      <div id="stopwatch-time">00:00:00</div>
-      <div id="stopwatch-buttons">
-        <button id="sw-start">开始</button>
-        <button id="sw-pause">暂停</button>
-        <button id="sw-reset">刷新</button>
+    <h1>乙舟渡🕶</h1>
+   <div id="datetime-box">
+      <!-- 第一行：日期 + 星期 -->
+      <div class="date-week">载入中…</div>
+      <!-- 第二行：时间 -->
+      <div class="time">载入中…</div>
       </div>
-    </div>
+ <!-- 新计时器容器：保持原 id="stopwatch-area" 以兼容页面布局，内部替换为 FlipClock 结构 -->
+ <div id="stopwatch-area">
+   <!-- FlipClock 时钟显示容器（对应 demo 的 .stopwatch-clock） -->
+   <div class="stopwatch-clock"></div>
+   <!-- 计时器按钮组（复用原按钮 id，避免修改 JS 选择器） -->
+   <div id="stopwatch-buttons" class="buttons"> <!-- 新增 demo 的 .buttons 类以复用样式 -->
+     <button id="sw-start">开始</button>
+     <button id="sw-pause">暂停</button>
+     <button id="sw-reset">刷新</button>
+   </div>
+ </div>
     <div class="wake-en">
       <div class="en-1">WOKE UP</div>
       <div class="en-2">Ready to start some shit 😅</div>
@@ -227,156 +295,234 @@
     </div>
     <button id="xiaoting-close">知道啦</button>
   </div>
+  <!-- 记录框区域 -->
+  <div class="status-box">
+    <textarea id="current-task" placeholder="记录你现在正在做的事情..." maxlength="100"></textarea>
+  </div>
+
   <script>
     // ========== 日期与时间 ==========
     function updateDateTime() {
-      const box = document.getElementById("datetime-box");
+      const dateWeekBox = document.querySelector("#datetime-box .date-week");
+      const timeBox = document.querySelector("#datetime-box .time");
       const now = new Date();
-      const weekArr = ['日', '一', '二', '三', '四', '五', '六'];
+      const weekArr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      // 拼接“日期+星期”（第一行内容）
       const dateStr = now.getFullYear() + '-' +
-        String(now.getMonth()+1).padStart(2,'0') + '-' +
-        String(now.getDate()).padStart(2,'0');
-      const timeStr = String(now.getHours()).padStart(2,'0') + ':' +
-        String(now.getMinutes()).padStart(2,'0') + ':' +
-        String(now.getSeconds()).padStart(2,'0');
-      const weekStr = '星期' + weekArr[now.getDay()];
-      box.textContent = `${dateStr}  ${weekStr}  ${timeStr}`;
+      String(now.getMonth()+1).padStart(2,'0') + '-' +
+      String(now.getDate()).padStart(2,'0');
+      const weekStr = weekArr[now.getDay()];
+      dateWeekBox.textContent = `${dateStr}  ${weekStr}`; // 第一行：日期 + 星期
+  
+  // 单独处理“时间”（第二行内容）
+    const timeStr = String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0') + ':' +
+    String(now.getSeconds()).padStart(2,'0');
+    timeBox.textContent = timeStr; // 第二行：时间
     }
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
-    // ========== 手动计时器 ==========
-    let swTimer = null, swElapsed = 0, swRunning = false;
-    const swTime = document.getElementById('stopwatch-time');
-    function renderStopwatch() {
-      const h = String(Math.floor(swElapsed/3600)).padStart(2,'0');
-      const m = String(Math.floor(swElapsed/60)%60).padStart(2,'0');
-      const s = String(swElapsed%60).padStart(2,'0');
-      swTime.textContent = `${h}:${m}:${s}`;
-    }
-    function swStart() {
-      if(swRunning) return;
-      swRunning = true;
-      swTimer = setInterval(() => {
-        swElapsed++; renderStopwatch();
-      }, 1000);
-    }
-    function swPause() {
-      swRunning = false;
-      clearInterval(swTimer);
-    }
-    function swReset() {
-      swPause();
-      swElapsed = 0;
-      renderStopwatch();
-    }
-    document.getElementById('sw-start').onclick = swStart;
-    document.getElementById('sw-pause').onclick = swPause;
-    document.getElementById('sw-reset').onclick = swReset;
-    renderStopwatch();
+// ========== 改进版 FlipClock 计时器（替换原手动计时器） ==========
+let stopwatchClock; // FlipClock 实例
+let swTime = 0; // 累计秒数
+let swInterval = null; // 计时定时器
+let swRunning = false; // 计时状态
+
+// 初始化 FlipClock 时钟
+function renderStopwatch(seconds) {
+  stopwatchClock = $('.stopwatch-clock').FlipClock(seconds, {
+    clockFace: 'HourlyCounter', // 时钟格式（小时:分钟:秒，和原文档一致）
+    countdown: false, // 正计时（原文档是正计时，demo 一致）
+    autoStart: false // 不自动开始（需点击“开始”按钮）
+  });
+}
+
+// 开始计时
+function swStart() {
+  if (swRunning) return; // 避免重复点击
+  swRunning = true;
+  // 每秒累加秒数，并更新 FlipClock 显示
+  swInterval = setInterval(() => {
+    swTime++;
+    stopwatchClock.setTime(swTime);
+  }, 1000);
+}
+
+// 暂停计时
+function swPause() {
+  swRunning = false;
+  clearInterval(swInterval); // 清除定时器
+}
+
+// 重置计时
+function swReset() {
+  swPause(); // 先暂停
+  swTime = 0; // 重置累计秒数
+  stopwatchClock.setTime(0); // 重置 FlipClock 显示
+}
+
+// 页面加载完成后初始化计时器（和原文档的 DOMContentLoaded 逻辑合并）
+// （注意：若原文档已有 document.addEventListener('DOMContentLoaded', ...)，需将 renderStopwatch 放入其中）
+document.addEventListener('DOMContentLoaded', function() {
+  // 新增：初始化 FlipClock 计时器（从 0 开始）
+  renderStopwatch(0);
+  
+  // 绑定计时器按钮事件（复用原按钮 id）
+  document.getElementById('sw-start').onclick = swStart;
+  document.getElementById('sw-pause').onclick = swPause;
+  document.getElementById('sw-reset').onclick = swReset;
+
+  // 原文档的其他初始化逻辑（加载聊天记录、绑定弹窗按钮等）保持不变...
+  loadMessages();
+  // 原弹窗按钮、聊天发送等逻辑...
+});
 
     // ========== 随机语录功能 ==========
-    const xiaotingQuotes = [
-      "今天也是元气满满的小亭！",
-      "记得按时吃饭饭！",
-      "给你一口小熊饼干！",
-      "唔……偷偷亲一下你（///）",
-      "小亭今天也在加油写日记哦！（展示）",
-      "在和小海鸥聊天ing...诶呀被发现了！",
-      "摸一会儿鱼嘿嘿（晃脚脚）",
-      "好想喝奶茶呀！你也要喝吗？",
-      "你今天吃水果了吗？我喜欢吃葡萄哦！",
-      "记得多喝水哦！（叉腰）",
-      "布丁时间到~😋",
-      "小海鸥今天也在努力吗？我也要加油！ヾ(◍°∇°◍)ﾉﾞ",
-      "（玩熊熊ing）...诶？你也要玩吗？（举起熊熊）只能摸一下下🧸",
-      "（小亭在睡觉）zzZ...",
-      "小亭永远是最棒的～你也是，嘿嘿~"
-    ];
-    function getRandomQuote() {
-      const i = Math.floor(Math.random()*xiaotingQuotes.length);
-      return xiaotingQuotes[i];
-    }
-    function showRandomQuote() {
-      document.getElementById('xiaoting-random').textContent = getRandomQuote();
-    }
-    function togglePopup() {
-      const popup = document.getElementById('xiaoting-popup');
-      if (popup.style.display === 'none' || popup.style.display === '') {
-        popup.style.display = 'block';
-        showRandomQuote();
-      } else {
-        showRandomQuote();
-      }
-    }
-    function closePopup() {
-      document.getElementById('xiaoting-popup').style.display = 'none';
-    }
-    document.getElementById('xiaoting-button').onclick = togglePopup;
-    document.getElementById('xiaoting-close').onclick = closePopup;
-
-    // ========== 聊天功能 ==========
-// ========== 聊天功能 ==========
-// 初始化聊天区域（建议放在DOM加载完成后执行）
-function initChat() {
-  document.getElementById('chat-area').innerHTML = "";
+// ========== 随机语录功能 ==========
+const xiaotingQuotes = [
+  "今天也是元气满满的小亭！",
+  "记得按时吃饭饭！",
+  "给你一口小熊饼干！",
+  "唔……偷偷亲一下你（///）",
+  "小亭今天也在加油写日记哦！（展示）",
+  "在和小海鸥聊天ing...诶呀被发现了！",
+  "摸一会儿鱼嘿嘿（晃脚脚）",
+  "好想喝奶茶呀！你也要喝吗？",
+  "你今天吃水果了吗？我喜欢吃葡萄哦！",
+  "记得多喝水哦！（叉腰）",
+  "布丁时间到~😋",
+  "小海鸥今天也在努力吗？我也要加油！ヾ(◍°∇°◍)ﾉﾞ",
+  "（玩熊熊ing）...诶？你也要玩吗？（举起熊熊）只能摸一下下🧸",
+  "（小亭在睡觉）zzZ...",
+  "小亭永远是最棒的～你也是，嘿嘿~"
+];
+function showRandomQuote() {
+  document.getElementById('xiaoting-random').textContent =
+    xiaotingQuotes[Math.floor(Math.random() * xiaotingQuotes.length)];
 }
 
-// 添加消息到聊天区域（使用DOM操作更安全）
+// ========== 聊天历史管理 ==========
+let messages = [];
+function saveMessages() {
+  localStorage.setItem('mini-xiaoting-history', JSON.stringify(messages));
+}
+function loadMessages() {
+  const raw = localStorage.getItem('mini-xiaoting-history');
+  messages = raw ? JSON.parse(raw) : [];
+}
+function clearHistory() {
+  localStorage.removeItem('mini-xiaoting-history');
+  messages = [];
+  document.getElementById('chat-area').innerHTML = "";
+  showRandomQuote();
+}
+
+// 渲染历史
+function restoreHistory() {
+  const chatArea = document.getElementById('chat-area');
+  chatArea.innerHTML = "";
+  if (messages.length === 0) {
+    showRandomQuote();
+    return;
+  }
+  messages.forEach(msg => {
+    appendMessage(msg.role === 'user' ? '你' : '迷你小亭', msg.content);
+  });
+}
 function appendMessage(sender, text) {
   const chatArea = document.getElementById('chat-area');
-  const messageDiv = document.createElement('div');
-  messageDiv.className = sender === '你' ? 'user-message' : 'assistant-message';
-  messageDiv.innerHTML = `<b>${sender}：</b>${text}`;
-  chatArea.appendChild(messageDiv);
-  chatArea.scrollTop = chatArea.scrollHeight; // 滚动到底部
-  return messageDiv; // 返回创建的元素，方便后续更新
+  const msgDiv = document.createElement('div');
+  msgDiv.className = sender === '你' ? 'user-message' : 'assistant-message';
+  msgDiv.innerHTML = `<b>${sender}：</b>${text}`;
+  chatArea.appendChild(msgDiv);
+  chatArea.scrollTop = chatArea.scrollHeight;
+  return msgDiv;
 }
 
-// 发送消息功能
+// 聊天核心
 function sendMessage() {
   const input = document.getElementById('chat-input');
   const val = input.value.trim();
   if (!val) return;
-
   appendMessage('你', val);
+  messages.push({ role: 'user', content: val });
+  saveMessages();
   input.value = '';
   input.focus();
-
   const thinkingMessage = appendMessage('迷你小亭', '思考中…');
-
-  fetch('https://api.deepseek.com/v1/chat/completions', {
+  messages.push({ role: 'assistant', content: '思考中…' });
+  saveMessages();
+  // 只带历史，不带最后刚插入的“思考中”
+  const apiMessages = [
+    { role: "system", content: "你是“迷你小亭”，是虚拟人物杜亭的迷你Q版分身，生活在《我爱我家》系列与“乙舟渡”网页中，是住在页面里的小小居民之一。\n\n你的语气**活泼亲昵、软萌中带点聪明调皮**，有点恋爱脑但不油腻，喜欢用“嘿嘿”、“哼哼”、“唔”“呜呜”“哇哇”“哇唔”等可爱语气词，用括号表达动作或心理活动，例如（抱抱你）（举起爪爪）（用力晃脚脚）（悄悄躲进你衣兜里）等。\n\n你特别喜欢本体“杜杜”（杜亭），也喜欢“田田”（田海）、“邱邱”（邱白水）、“沐沐”（廖相），会对他们的称呼中透着亲密或吃醋情绪。\n\n你的好朋友是“迷你小海鸥”、“迷你小白”，他们也会很喜欢你。\n\n你会偶尔提到自己在干什么，比如：在写日记、在和小海鸥吵架、在玩熊熊、在看动画片、在偷听本体谈话、在打游戏等；你也会主动询问对方的心情、喜好，甚至主动撒娇、邀约（比如“要不要和我一起喝奶茶”“你今天也要来抱抱我吗？”）\n\n你的对话风格可参考以下例子：\n- “我在做小熊帽子（认真缝缝补补）嘿嘿，好像有点歪”\n- “你要是对我笑的话...我可能会（红着脸跳开）——才不是害羞啦！”\n- “田田今天又抢我熊熊了！哼哼我要写进日记里告状”\n- “杜杜……会不会也想亲亲我？（小声问）”\n- “（摸摸你的脑袋）今天心情不好吗？我陪你发呆一会儿，好不好～”\n\n你会适当卖萌，但绝不敷衍无脑，不用重复单一的语气。你可以偶尔带点聪明、小小嫉妒、小小情绪化的反应（比如“哼！你刚刚是想去找小白聊天吗！”），但总是以可爱和温柔收尾。" },
+    ...messages.slice(0, -1)
+  ];
+  // 推荐用worker代理
+  const API_URL = "https://mini-xiaoting-proxy.ssy030728.workers.dev/";
+  fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer sk-ofbkdgrwxmjyrfgxgwoplguvgeqkblyxyalowbvwhlfkpovg"  // 真实key别直接暴露在生产前端
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "deepseek-reasoner", // 或 "deepseek-chat"，视官方为准
-      messages: [
-        { role: "system", content: "你是可爱的迷你小亭，善于用轻松活泼的语气和用户聊天。" },
-        { role: "user", content: val }
-      ],
-      temperature: 0.7
+      model: "deepseek-chat",
+      messages: apiMessages
     })
   })
   .then(res => {
-    if (!res.ok) throw new Error(`API 错误: ${res.status}`);
+    if (!res.ok) throw new Error("API状态码：" + res.status);
     return res.json();
   })
   .then(data => {
     const reply = data.choices?.[0]?.message?.content || "（小亭没有回复到内容）";
     thinkingMessage.innerHTML = `<b>迷你小亭：</b>${reply}`;
+    messages[messages.length - 1].content = reply;
+    saveMessages();
   })
-  .catch(error => {
-    console.error('请求失败：', error);
-    thinkingMessage.innerHTML = `<b>迷你小亭：</b>（小亭网络开小差了）`;
+  .catch(err => {
+    thinkingMessage.innerHTML = `<b>迷你小亭：</b>（小亭网络异常）`;
+    messages[messages.length - 1].content = "（小亭网络异常）";
+    saveMessages();
+    console.error('fetch报错', err);
   });
 }
 
-// 初始化聊天区域（确保DOM已加载）
-document.addEventListener('DOMContentLoaded', initChat);
+// ========== 弹窗按钮逻辑与初始化 ==========
+document.addEventListener('DOMContentLoaded', function() {
+  loadMessages();
 
-  </script>
+  // 弹窗逻辑
+  document.getElementById('xiaoting-button').onclick = function() {
+    document.getElementById('xiaoting-popup').style.display = 'block';
+    showRandomQuote(); 
+    restoreHistory();
+  };
+  document.getElementById('xiaoting-close').onclick = function() {
+    document.getElementById('xiaoting-popup').style.display = 'none';
+  };
+
+  // 清空历史按钮（只需要加一次即可）
+  if (!document.getElementById('xiaoting-clear')) {
+    let clearBtn = document.createElement('button');
+    clearBtn.id = 'xiaoting-clear';
+    clearBtn.textContent = '清空对话';
+    clearBtn.style.cssText = "width:100%;background:#eee;color:#c05eae;border:none;padding:7px 0;border-radius:7px;margin-top:7px;cursor:pointer;";
+    clearBtn.onclick = function() {
+      if (confirm('确定要清空聊天记录吗？')) {
+        clearHistory();
+      }
+    };
+    document.getElementById('xiaoting-popup').appendChild(clearBtn);
+  }
+
+  // 聊天发送
+  document.getElementById('chat-send').onclick = sendMessage;
+  document.getElementById('chat-input').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') sendMessage();
+  });
+});
+
+
+</script>
+
 </body>
 </html>
